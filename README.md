@@ -7,10 +7,6 @@ Myrva is a parametric insurance platform built for platform-based gig workers (S
 ---
 
 ## Table of Contents
-
-- [Problem Statement](#problem-statement)
-- [What is Parametric Insurance](#what-is-parametric-insurance)
-- [Scope and Constraints](#scope-and-constraints)
 - [Architecture Overview](#architecture-overview)
 - [End-to-End Workflow](#end-to-end-workflow)
   - [Worker Onboarding](#1-worker-onboarding)
@@ -23,43 +19,6 @@ Myrva is a parametric insurance platform built for platform-based gig workers (S
 - [Data Architecture](#data-architecture)
 - [AI and ML Models](#ai-and-ml-models)
 - [Hackathon Focus](#hackathon-focus)
-
----
-
-## Problem Statement Given
-
-India's platform-based delivery partners — working with Zomato, Swiggy, Zepto, Amazon, and Dunzo — are the backbone of the country's fast-paced digital economy. External disruptions such as extreme weather events, severe air pollution, and natural disasters can reduce their effective working hours significantly, causing a loss of **20–30% of monthly earnings**.
-
-Gig workers currently have no income protection mechanism against these uncontrollable external events. When disruptions occur, they bear the full financial loss with no safety net.
-
-**The Challenge:** Build an AI-enabled parametric insurance platform that safeguards gig workers against income loss caused by external disruptions, providing automated coverage and payouts, intelligent fraud detection, and a weekly pricing model aligned with the gig earnings cycle.
-
----
-
-## What is Parametric Insurance
-
-Unlike traditional insurance, parametric insurance pays out automatically when a pre-defined measurable trigger threshold is crossed — without the worker needing to file a claim. For example:
-
-- Rainfall exceeds 60mm in a zone within a 24-hour window
-- AQI crosses 300 (hazardous) in the worker's active zone
-- A government-declared curfew or heatwave alert is issued
-
-When any such trigger is detected, the system automatically validates eligibility and initiates a payout — the worker receives funds directly via UPI without any manual intervention.
-
----
-
-## Scope and Constraints
-
-This platform strictly covers **income disruption due to external, measurable environmental and civic events only.**
-
-The following are explicitly excluded from coverage:
-
-- Health or medical insurance
-- Life insurance
-- Accident insurance
-- Vehicle damage or repair coverage
-
-Pricing follows a **weekly premium model** to match the typical payout cadence of gig workers.
 
 ---
 
@@ -230,7 +189,7 @@ The Risk Pool Service continuously tracks the ratio of premiums collected to cla
 - Amazon S3 (Data Lake) — historical weather, claim, and earnings data for model training
 
 **Payments**
-- Razorpay / UPI
+- Simulated Payment API 
 
 **Notifications**
 - Firebase Cloud Messaging (FCM)
