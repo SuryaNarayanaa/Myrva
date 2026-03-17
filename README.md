@@ -7,6 +7,7 @@ Myrva is a parametric insurance platform built for platform-based gig workers (S
 ---
 
 ## Table of Contents
+- [Problem Understanding](#problem-understanding)
 - [Architecture Overview](#architecture-overview)
 - [End-to-End Workflow](#end-to-end-workflow)
   - [Worker Onboarding](#1-worker-onboarding)
@@ -18,6 +19,21 @@ Myrva is a parametric insurance platform built for platform-based gig workers (S
 - [Data Architecture](#data-architecture)
 - [AI and ML Models](#ai-and-ml-models)
 - [Hackathon Focus](#hackathon-focus)
+
+---
+
+## Problem Understanding
+
+A delivery worker’s job looks flexible on the surface, but their income is tightly coupled to conditions they don’t control. They don’t earn a fixed salary - they earn only when they are able to stay online, accept orders, and complete deliveries. That means their weekly income is not just variable, it is fragile.
+
+Workers often plan expenses assuming steady daily income, but external factors like bad weather, pollution, or local restrictions can suddenly reduce or eliminate their ability to work. The real issue is not a single lost day, but the cumulative impact losing multiple days in a week directly affects essentials like fuel, rent, and food, with no safety net in place. 
+
+Traditional insurance systems fail to address this because there is no physical damage or injury to claim, making the loss invisible to insurers but immediate and critical for the worker.
+
+This creates a clear gap. Gig workers are exposed to frequent, external disruptions that reduce their income, but there is no system that recognizes or compensates for these events. Any solution that depends on manual claims or delayed processing will fail, because the impact is immediate and short-term.
+
+The core problem, therefore, is not the absence of insurance in general. It is the absence of a system that can identify when a worker’s earning capacity is disrupted by external conditions and compensate that loss quickly and automatically.
+This is fundamentally a problem of detecting income disruption in real time and responding to it without friction.
 
 ---
 
