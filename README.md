@@ -17,8 +17,8 @@ Myrva is a parametric insurance platform built for platform-based gig workers (S
   - [Risk Pool Monitoring](#5-risk-pool-monitoring-internal-loop)
 - [Tech Stack](#tech-stack)
 - [Data Architecture](#data-architecture)
+- [Development Plan](#development-plan) 
 - [AI and ML Models](#ai-and-ml-models)
-- [Hackathon Focus](#hackathon-focus)
 
 ---
 
@@ -158,22 +158,7 @@ The Risk Pool Service continuously tracks the ratio of premiums collected to cla
 
 ## Tech Stack
 
-**Mobile**
-- React Native (iOS and Android)
-
-**Backend**
-- TypeScript (primary backend language)
-- Node.js / Express or Fastify for service layer
-
-**Machine Learning**
-- Python
-- XGBoost — risk scoring
-- LightGBM — premium pricing (dynamic)
-- Disruption forecasting models
-- Fraud anomaly detection
-
-**Event Streaming**
-- Apache Kafka — real-time event bus for disruption triggers and claim events
+![Tech Stack Diagram](./docs/tech_stack.png)
 
 **Databases**
 
@@ -184,17 +169,8 @@ The Risk Pool Service continuously tracks the ratio of premiums collected to cla
 | PostGIS (PostgreSQL extension) | Geospatial queries — zone-based eligibility, GPS validation |
 | MongoDB | Worker activity logs, claim records |
 | Redis (Feature Store) | Real-time ML feature serving — risk scores, earnings data, weather features, location signals |
-
-**Data Layer**
-- Amazon S3 (Data Lake) — historical weather, claim, and earnings data for model training
-
-**Payments**
-- Simulated Payment API 
-
-**Notifications**
-- Firebase Cloud Messaging (FCM)
-- SMS
-- WhatsApp
+ 
+- Chose React Native to enable real-time, location-aware interactions (GPS, notifications) and provide a more reliable, performant experience for workers compared to a web app.
 
 ---
 
@@ -243,6 +219,10 @@ The Risk Pool Service continuously tracks the ratio of premiums collected to cla
 Stores continuous time-series data: weather readings, AQI measurements, GPS event logs, and zone-level trigger history — enabling both real-time threshold detection and retrospective audit.
 
 ---
+
+## Development Plan
+
+The Development Plan is Linked to [Development Plan](./TODO.md)
 
 ## AI and ML Models
 
