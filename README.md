@@ -176,47 +176,8 @@ The Risk Pool Service continuously tracks the ratio of premiums collected to cla
 
 ## Data Architecture
 
-**PostgreSQL (Worker — Policy)**
-
-| Field | Description |
-|---|---|
-| workerId | Unique worker identifier |
-| name | Worker name |
-| city, zone | Geographic assignment |
-| platformId | Swiggy / Zomato worker ID |
-| policyId | Active policy reference |
-| weeklyPremium | Current week's premium amount |
-| coverageStatus | Active / inactive / suspended |
-| locationData | PostGIS-enabled coordinates |
-
-**MongoDB (User Activity)**
-
-| Field | Description |
-|---|---|
-| claimId | Unique claim identifier |
-| workerId | Worker reference |
-| policyId | Policy reference |
-| triggerId | Disruption trigger that caused the event |
-| deliveries | Delivery count in period |
-| hours | Active hours in period |
-| dailyEarnings | Day-level earnings records |
-| weeklyAvg | Computed weekly average earnings |
-| status | Processing status |
-
-**MongoDB (Claim)**
-
-| Field | Description |
-|---|---|
-| claimId | Unique claim identifier |
-| workerId | Worker reference |
-| policyId | Policy reference |
-| amount | Payout amount |
-| status | Approved / flagged / paid |
-| timestamp | Event and processing timestamps |
-
-**TimescaleDB**
-
-Stores continuous time-series data: weather readings, AQI measurements, GPS event logs, and zone-level trigger history — enabling both real-time threshold detection and retrospective audit.
+db design - pendinggg
+and add bout feature store, mongo, timescaledb
 
 ---
 
@@ -234,4 +195,20 @@ The Development Plan is Linked to [Development Plan](./TODO.md)
 | Fraud Anomaly Detection | Isolation Forest / ensemble | Identify anomalous claim patterns before payout approval |
 
 All models are served via the AI Risk Engine, which reads features from the Redis Feature Store and writes updated scores back for downstream consumption by the Policy and Claim services.
+
+---
+
+
+
+### Risk Assessment Pipeline
+
+![Risk Assessment Pipeline](./docs/ra-pipeline.png)
+
+This pipeline builds the worker-level risk signal used for weekly premium pricing. It combines historical worker activity, city/zone-level disruption patterns, external signals (weather, AQI, demand volatility), and policy behavior to generate calibrated risk scores. These scores are consumed by the Policy Service for pricing and by internal monitoring for portfolio balancing.
+
+### Fraud Detection Pipeline
+
+![Fraud Detection Pipeline](./docs/fd-pipeline.png)
+
+This pipeline evaluates claims before payout and assigns a fraud likelihood score. It uses location consistency checks, identity/device linkage, behavioral anomalies, and historical claim patterns to detect suspicious activity such as GPS spoofing, duplicate identities, or impossible movement. High-risk claims are routed for manual review, while low-risk claims continue through automated payout.
 
