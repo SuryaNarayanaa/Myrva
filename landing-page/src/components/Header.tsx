@@ -19,24 +19,25 @@ export default function Header() {
       <nav className="mx-auto px-4 sm:px-6 lg:px-24 py-4 flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <motion.div
-            className="h-10 flex items-center justify-center"
-            whileHover={{ scale: 1.03, rotate: -1 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-          >
-            <span
-              className="text-3xl text-gray-900 leading-none"
-              style={{
-                fontFamily: '"Permanent Marker", "Comic Sans MS", cursive',
-                letterSpacing: '0.02em',
-                textShadow: '1px 1px 0px rgba(0,0,0,0.08)',
-              }}
+          <a href="/">
+            <motion.div
+              className="h-10 flex items-center justify-center"
+              whileHover={{ scale: 1.03, rotate: -1 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.2 }}
             >
-              M<span className="text-teal-600">Y</span>RVA
-            </span>
-          </motion.div>
-          
+              <span
+                className="text-3xl text-gray-900 leading-none"
+                style={{
+                  fontFamily: '"Permanent Marker", "Comic Sans MS", cursive',
+                  letterSpacing: '0.02em',
+                  textShadow: '1px 1px 0px rgba(0,0,0,0.08)',
+                }}
+              >
+                M<span className="text-teal-600">Y</span>RVA
+              </span>
+            </motion.div>
+          </a>
         </div>
 
         {/* Navigation Menu */}
@@ -44,7 +45,7 @@ export default function Header() {
           {navItems.map((item, index) => (
             <motion.a
               key={item}
-              href={`#${item.toLowerCase().replace(/ /g, '-')}`}
+              href={item === 'Features' ? '/features' : `/#${item.toLowerCase().replace(/ /g, '-')}`}
               className="text-gray-600 hover:text-gray-900 transition-colors font-medium"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -108,7 +109,7 @@ export default function Header() {
             {navItems.map((item) => (
               <a
                 key={`mobile-${item}`}
-                href={`#${item.toLowerCase().replace(/ /g, '-')}`}
+                href={item === 'Features' ? '/features' : `/#${item.toLowerCase().replace(/ /g, '-')}`}
                 onClick={() => setIsMenuOpen(false)}
                 className="block px-4 py-3 text-gray-700 font-medium"
               >
