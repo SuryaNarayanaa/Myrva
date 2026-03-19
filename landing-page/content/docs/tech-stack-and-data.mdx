@@ -1,0 +1,61 @@
+---
+title: Tech Stack & Data
+description: Storage design, data ownership, and external data dependencies used by Myrva.
+---
+
+# Tech Stack & Data
+
+## Tech stack diagram
+
+![Tech Stack Diagram](/docs/tech_stack.png)
+
+## Core data stores
+
+| Store | Role |
+| --- | --- |
+| PostgreSQL | Worker profiles, identity records, policy contracts |
+| TimescaleDB (PostgreSQL extension) | Time-series weather, AQI, GPS, trigger history |
+| PostGIS (PostgreSQL extension) | Geospatial zone eligibility and location checks |
+| MongoDB | Worker activity logs and claim records |
+| Redis (feature store) | Online serving of risk and pricing features |
+| S3 Data Lake | Long-term historical training and analytics data |
+
+## External data dependencies
+
+| Source | Primary Usage |
+| --- | --- |
+| IMD | Rain, flood, heatwave weather signals |
+| OpenWeather | Supplementary weather redundancy |
+| OpenAQ | AQI severity tracking |
+| data.gov.in | Government alerts and zone metadata |
+| MOSDAC | Satellite weather/flood signals |
+| Flood Forecast Services | River and flood condition feed |
+| NDMA | Disaster declarations |
+| Google Routes API | Traffic disruption and route constraints |
+| Platform API (simulated) | Zone closure and demand-drop indicators |
+
+## Data flow model
+
+1. Ingest raw multi-source signals
+2. Normalize to zone-time event schema
+3. Persist in time-series + audit stores
+4. Build online features in Redis
+5. Feed trigger engine and AI scoring services
+
+## Data architecture diagram
+
+![Database Schema Diagram](/docs/db.png)
+
+## Data quality controls
+
+- Timestamp normalization to prevent sequence drift
+- Zone ID canonicalization for deterministic policy checks
+- Missing value handling before model scoring
+- Immutable claim audit records for payout explainability
+
+## Why this stack was selected
+
+- TimescaleDB + PostGIS handles time + location jointly
+- Redis supports low-latency feature retrieval for online decisions
+- S3 data lake enables reproducible offline model training
+- PostgreSQL and MongoDB separation keeps transactional and event logs independently scalable

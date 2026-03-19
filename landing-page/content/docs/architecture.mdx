@@ -1,0 +1,57 @@
+---
+title: Architecture
+description: Service architecture of Myrva including ingestion, trigger evaluation, claims, fraud detection, and risk pool loops.
+---
+
+# Architecture
+
+Myrva is built as a modular service architecture designed for real-time trigger detection and rapid payout automation.
+
+## High-level architecture diagram
+
+![High-Level Architecture Diagram](/docs/hld.png)
+
+## Logical layers
+
+| Component | Responsibility |
+| --- | --- |
+| API Gateway | JWT auth, request routing, and rate limiting |
+| Identity Service | KYC, OTP, face/device verification |
+| Worker Profile Service | Platform profile, city/zone attributes |
+| Policy Service | Coverage activation and weekly premium computation |
+| Activity & Earnings Service | Online hours, deliveries, earnings baseline |
+| Data Ingestion Layer | Collect and normalize weather, AQI, alerts, mobility inputs |
+| Parametric Trigger Engine | Evaluate threshold events and publish disruption events |
+| Claim Engine | Eligibility check, payout amount calculation, claim state transition |
+| Fraud Detection Service | GPS spoof checks, identity reuse checks, behavior anomaly checks |
+| AI Risk Engine | Worker risk scoring, pricing signal generation, disruption forecasting |
+| Feature Store (Redis) | Low-latency online feature serving for policy/claim decisions |
+| Payment Service | Payout execution via Razorpay/UPI rails |
+| Notification Service | FCM, SMS, WhatsApp event communication |
+| Risk Pool Service | Premium vs payout tracking and portfolio health metrics |
+| Data Lake (S3) | Historical model training and audit analytics |
+
+## Event-driven core
+
+The architecture is event-centric:
+
+1. External signal exceeds threshold in a zone
+2. Trigger engine emits `DisruptionEvent`
+3. Claim engine consumes event and evaluates active policies
+4. Fraud engine gates auto-approval vs hold/manual review
+5. Payment + notification services finalize payout journey
+
+## Reliability principles
+
+- Deterministic trigger thresholds
+- Idempotent claim processing
+- Zone-time audit logs for every decision
+- Separation between hard-rule fraud filters and ML fraud scoring
+
+## Why this shape works
+
+This architecture is optimized for **speed, explainability, and operational control**:
+
+- Speed from predefined thresholds and event streaming
+- Explainability from deterministic rule checkpoints
+- Control from distinct policy, claims, and risk-pool services

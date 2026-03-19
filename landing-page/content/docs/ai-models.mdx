@@ -1,0 +1,65 @@
+---
+title: AI Models
+description: Risk scoring, premium pricing, disruption forecasting, and fraud detection model pipelines.
+---
+
+# AI Models
+
+## Model portfolio
+
+| Model | Algorithm | Objective |
+| --- | --- | --- |
+| Risk Scoring | XGBoost | Worker-level risk estimation using behavior, zone, and history |
+| Premium Pricing | LightGBM | Convert risk outputs to dynamic weekly premium signal |
+| Disruption Forecasting | Time-series / regression | Forecast near-term zone-level disruption probability |
+| Fraud Anomaly Detection | Isolation Forest + GBDT | Detect suspicious claims before payout |
+
+## Risk assessment pipeline diagram
+
+![Risk Assessment Pipeline](/docs/ra-pipeline.png)
+
+## Risk assessment pipeline
+
+1. **Feature ingestion**
+   - Worker activity
+   - Earnings volatility
+   - Zone-level disruption frequency
+   - Weather and AQI severity trends
+2. **Normalization and quality layer**
+   - Missing-value handling
+   - Outlier treatment
+   - Time alignment
+3. **Model layer**
+   - XGBoost worker risk score
+   - Forecast model for zone disruption probability
+   - LightGBM pricing transformation
+4. **Final score and pricing signal**
+   - Produce calibrated risk band
+   - Produce premium input for policy service
+
+## Fraud detection pipeline
+
+![Fraud Detection Pipeline](/docs/fd-pipeline.png)
+
+### Stage A: Deterministic hard filters
+
+- GPS anomalies
+- Identity reuse patterns
+- Payment/device duplication
+- Impossible movement checks
+
+### Stage B: ML scoring for non-obvious fraud
+
+- Isolation Forest for behavior anomalies
+- GBDT for supervised fraud likelihood
+
+### Stage C: Operational decision mapping
+
+- `Clear`: auto-approve
+- `Manual Review`: human verification
+- `Hold`: pause for additional checks
+- `Reject`: deny payout
+
+## Continuous learning loop
+
+Manual review outcomes and false-positive analysis feed back into model retraining to improve precision while preserving payout speed for legitimate workers.

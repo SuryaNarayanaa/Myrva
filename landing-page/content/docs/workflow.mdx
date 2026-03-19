@@ -1,0 +1,75 @@
+---
+title: End-to-End Workflow
+description: Complete execution flow from worker onboarding to disruption-triggered payout and risk pool feedback.
+---
+
+# End-to-End Workflow
+
+## Workflow diagram
+
+![End-to-End Workflow Diagram](/docs/workflow.png)
+
+## 1) Worker onboarding
+
+Flow:
+
+1. App registration
+2. Aadhaar / PAN verification
+3. Face + OTP verification
+4. UPI / bank account linking
+5. Platform affiliation confirmation (Swiggy / Zomato)
+6. Coverage tier selection (Basic / Standard / Premium)
+
+Outcome: verified worker profile + coverage preference captured.
+
+## 2) Profiling and premium setup
+
+Flow:
+
+1. Historical activity ingestion
+2. Weekly earnings baseline construction
+3. Zone and city risk enrichment
+4. Risk scoring + disruption probability calculation
+5. Weekly premium quote generated
+6. Worker accepts or exits
+
+Outcome: policy activation with current-week premium.
+
+## 3) Real-time disruption monitoring
+
+External streams are continuously ingested from weather, AQI, government alerts, and mobility inputs.
+
+Example threshold events:
+
+- Rainfall > 60 mm / 24h
+- AQI > 300
+- Curfew / heatwave declaration
+
+When thresholds are breached, `DisruptionEvent` is emitted and persisted for audit.
+
+## 4) Claim automation + fraud guardrail
+
+Flow:
+
+1. Event hits affected zone
+2. Eligibility checks (policy active + zone/time fit)
+3. Fraud layer runs:
+   - GPS spoof checks
+   - Duplicate identity / payment checks
+   - Impossible travel checks
+4. Decision:
+   - Clear → auto-approve and pay
+   - Suspicious → hold or manual review
+
+Outcome: valid claims are paid with minimal latency.
+
+## 5) Risk pool feedback loop
+
+Post-claim data is used for:
+
+- Loss ratio tracking
+- Model recalibration
+- Risk band reallocation
+- Future premium signal adjustment
+
+Outcome: portfolio remains solvent while preserving competitiveness.

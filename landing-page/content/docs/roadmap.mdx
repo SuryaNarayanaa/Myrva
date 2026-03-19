@@ -1,0 +1,54 @@
+---
+title: Roadmap
+description: Suggested implementation phases to deliver Myrva from MVP to production-grade risk automation.
+---
+
+# Roadmap
+
+This roadmap organizes delivery into clear, dependency-aware phases.
+
+## Phase 1 — Foundations
+
+- Worker onboarding and KYC flow
+- Profile storage and zone mapping
+- Basic policy entity and tier activation
+- Baseline weekly premium calculation service
+
+## Phase 2 — Trigger engine MVP
+
+- Integrate weather + AQI sources
+- Build normalization pipeline
+- Define threshold rules for initial covered events
+- Publish disruption events over event bus
+
+## Phase 3 — Claims and payouts
+
+- Eligibility checks against active policy + zone
+- Auto-claim creation from disruption events
+- Payment execution integration (Razorpay / UPI)
+- Worker notification service (FCM/SMS/WhatsApp)
+
+## Phase 4 — Fraud controls
+
+- GPS spoof and impossible-travel checks
+- Duplicate identity and payout-link detection
+- Manual review queue + claim status tooling
+
+## Phase 5 — AI risk intelligence
+
+- Worker risk scoring model rollout
+- Dynamic premium model rollout
+- Disruption forecasting for ahead-of-time pricing updates
+- Fraud ML scoring layer for subtle anomaly detection
+
+## Phase 6 — Risk pool governance
+
+- Loss ratio dashboards
+- Portfolio exposure monitoring by city/zone/tier
+- Premium margin and tier factor recalibration controls
+
+## Recommended delivery strategy
+
+- Start with deterministic rules and transparent eligibility logic.
+- Add ML gradually behind observability and fallback logic.
+- Keep payouts fast while maintaining fraud safeguards.

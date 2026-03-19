@@ -1,0 +1,76 @@
+---
+title: Policy & Pricing
+description: Policy structure, tiered event coverage, and dynamic weekly premium model used by Myrva.
+---
+
+# Policy & Pricing
+
+## Policy plan
+
+- **Plan:** Delivery Partner Income Shield
+- **Enrollment window:** 2 months
+- **Premium cadence:** weekly
+
+This structure aligns with the weekly income rhythm of gig delivery workers.
+
+## Weekly premium model
+
+### Step 1 — Composite disruption loss fraction
+
+`L_f = 1 - Π(i=1..n) (1 - P_i × S_i)`
+
+Where each disruption contributes by probability and severity for the worker’s zone and time windows.
+
+### Step 2 — Final weekly premium
+
+`Pr_final = (E_w × L_f × C_t) × (1 + M)`
+
+| Variable | Meaning |
+| --- | --- |
+| P_i | Probability of disruption i in worker’s zone during current week |
+| S_i | Severity of disruption i (includes timing effect; peak-hour impact is larger) |
+| E_w | Expected weekly earnings baseline from activity history |
+| C_t | Tier coverage factor (replacement proportion by tier) |
+| M | Risk pool margin to maintain platform solvency |
+
+## Tier definitions
+
+| Tier | Covered Events | Intended Segment |
+| --- | --- | --- |
+| Basic | Severe weather (rain, flood, heat) | Essential protection users |
+| Standard | Basic + AQI events | Full-time urban workers |
+| Premium | Standard + government-declared disruptions | High-risk zones / high-earning weeks |
+
+## Event-level coverage matrix
+
+| Disruption | Basic | Standard | Premium |
+| --- | :---: | :---: | :---: |
+| Heavy Rain | ✅ | ✅ | ✅ |
+| Flood | ✅ | ✅ | ✅ |
+| Extreme Heat | ✅ | ✅ | ✅ |
+| Hazardous AQI | ❌ | ✅ | ✅ |
+| Severe AQI | ❌ | ✅ | ✅ |
+| Government Curfew | ❌ | ❌ | ✅ |
+| NDMA Disaster | ❌ | ❌ | ✅ |
+| Local Strike | ❌ | ❌ | ✅ |
+| Zone Closure | ❌ | ❌ | ✅ |
+
+## Explicit non-coverage
+
+The policy excludes all of the following across tiers:
+
+- Vehicle repair
+- Fuel costs
+- Device damage
+- Platform-side order cancellations (without trigger event)
+- Personal illness
+
+## Pricing calibration strategy
+
+`C_t` and `M` are tuned as a constrained optimization problem:
+
+- Maximize affordability and competitiveness
+- Maintain acceptable ruin probability for risk pool
+- Preserve surplus for correlated events (e.g., city-wide weather shocks)
+
+Historical disruption simulations (Monte Carlo) are used to evaluate robustness before production deployment.

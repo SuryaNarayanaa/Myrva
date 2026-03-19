@@ -1,0 +1,13 @@
+{
+  "title": "Myrva Documentation",
+  "pages": [
+    "index",
+    "problem-and-persona",
+    "policy-and-pricing",
+    "architecture",
+    "workflow",
+    "tech-stack-and-data",
+    "ai-models",
+    "roadmap"
+  ]
+}

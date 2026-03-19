@@ -1,0 +1,52 @@
+---
+title: Problem & Persona
+description: Understand the income disruption problem and the delivery worker persona that Myrva is built for.
+---
+
+# Problem & Persona
+
+## Core problem statement
+
+Delivery workers have variable, fragile weekly income. Their earnings depend on:
+
+1. Being online
+2. Receiving orders
+3. Being able to move safely in roads and zones
+
+If any of these is interrupted by weather, AQI, or restrictions, earnings can drop immediately.
+
+The problem is not job loss. It is **temporary earning capacity disruption** with immediate cash-flow impact.
+
+## Why existing insurance is insufficient
+
+- No clear physical damage or injury event for standard claims
+- Income loss is often short, frequent, and operational
+- Manual claims create delay and high friction
+
+Myrva addresses this through predefined event thresholds and automated claim execution.
+
+## Target persona
+
+**Delivery Partner (Swiggy / Zomato)**
+
+- Works long online hours
+- Weekly payouts from platform
+- Low cash buffer
+- High dependence on predictable daily output
+
+## Income break mechanics
+
+Income failure typically happens from one of these patterns:
+
+- **Mobility disruption:** flood, heavy rain, road blocks, curfew
+- **Demand / zone disruption:** zone closure or platform-side disruption signal
+- **Health-risk environment:** severe AQI and heatwave conditions reducing workable hours
+
+## Product design implications
+
+Because losses are fast and short-cycle, the system must be:
+
+- Trigger-based, not claim-form dependent
+- Zone-aware and time-aware
+- Weekly-priced and worker-specific
+- Fraud-resilient without blocking valid payouts

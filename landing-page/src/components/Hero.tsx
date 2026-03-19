@@ -304,7 +304,8 @@ export default function Hero() {
           </motion.div>
 
           {/* CTA Button */}
-          <motion.button
+          <motion.a
+            href="/docs"
             className="w-full sm:w-auto px-6 sm:px-10 py-3.5 sm:py-4 bg-teal-600 text-white text-sm sm:text-base font-bold rounded-2xl cursor-pointer hover:bg-teal-700 transition-all shadow-2xl"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -316,7 +317,7 @@ export default function Hero() {
             whileTap={{ scale: 0.95 }}
           >
             View Architecture
-          </motion.button>
+          </motion.a>
         </div>
 
         <motion.div
