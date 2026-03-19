@@ -12,11 +12,6 @@ Myrva is a parametric insurance platform built for platform-based gig workers (S
 - [Policy Plan, Tiers & Event Coverage](#policy-plan-tiers--event-coverage)
 - [Architecture Overview](#architecture-overview)
 - [End-to-End Workflow](#end-to-end-workflow)
-  - [Worker Onboarding](#1-worker-onboarding)
-  - [Worker Profiling and Risk Setup](#2-worker-profiling-and-risk-setup)
-  - [Real-Time Disruption Monitoring](#3-real-time-disruption-monitoring)
-  - [Fraud Detection and Claim Automation](#4-fraud-detection-and-claim-automation)
-  - [Risk Pool Monitoring](#5-risk-pool-monitoring-internal-loop)
 - [Tech Stack](#tech-stack)
 - [Data Architecture](#data-architecture)
 - [Development Plan](#development-plan)
@@ -64,7 +59,29 @@ The key point for Myrva is simple: this is not job loss, it is temporary income 
 
 ### Policy Plan
 
-**One plan** — `Delivery Partner Income Shield`. Workers enroll for a **2–3 month window** and pay **week by week**.
+**One plan** — `Delivery Partner Income Shield`. Workers enroll for a **2 month window** and pay **week by week**.
+
+### Weekly Premium Calculation
+
+The weekly premium is computed dynamically every Monday using the following model:
+
+**Step 1 — Loss Fraction** (composite disruption risk for the week):
+
+$$L_f = 1 - \prod_{i=1}^{n}(1 - P_i \times S_i)$$
+
+**Step 2 — Final Weekly Premium:**
+
+$$Pr_{final} = (E_w \times L_f \times C_t) \times (1 + M)$$
+
+| Variable | Meaning |
+|---|---|
+| `Pᵢ` | Probability of disruption `i` occurring in the worker's zone this week — fetched from weather / AQI / govt APIs |
+| `Sᵢ` | Severity of disruption `i` — based on frequency and timing (e.g., an event during 12–3 PM peak causes ~40% income loss vs. off-peak) |
+| `Eᵥᵥ` | Worker's expected weekly earnings baseline (from platform activity history) |
+| `Cₜ` | Coverage tier factor — the income replacement % for the selected tier (Basic / Standard / Premium) |
+| `M` | Risk pool margin — ensures platform sustainability and covers correlated catastrophic events |
+
+**Setting `Cₜ` and `M`:** Treated as a constrained optimisation problem. Monte Carlo simulations over historical weather and disruption patterns balance maximum market competitiveness (higher `Cₜ`) against the ruin probability of the risk pool — ensuring sufficient surplus to cover claims without exhausting capital reserves.
 
 ### Policy Tiers
 
