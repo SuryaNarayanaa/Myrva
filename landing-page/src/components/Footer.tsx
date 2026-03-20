@@ -89,10 +89,16 @@ export default function Footer() {
               transition={{ duration: 0.8, ease: easeOutQuint }}
             >
               <div className="flex items-center gap-3 mb-8">
-                <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center shadow-lg transform -rotate-3 hover:rotate-0 transition-transform cursor-pointer">
-                  <span className="text-white font-bold text-2xl" style={{ fontFamily: '"Permanent Marker", "Comic Sans MS", cursive' }}>M</span>
-                </div>
-                <span className="text-3xl font-extrabold text-gray-900 tracking-tight">Myrva</span>
+                <span
+                  className="text-3xl text-gray-900 leading-none"
+                  style={{
+                    fontFamily: '"Permanent Marker", "Comic Sans MS", cursive',
+                    letterSpacing: '0.02em',
+                    textShadow: '1px 1px 0px rgba(0,0,0,0.08)',
+                  }}
+                >
+                  M<span className="text-teal-600">Y</span>RVA
+                </span>
               </div>
               
               <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6 leading-[1.2]">

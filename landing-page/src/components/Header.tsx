@@ -20,12 +20,7 @@ export default function Header() {
         {/* Logo */}
         <div className="flex items-center gap-3">
           <a href="/">
-            <motion.div
-              className="h-10 flex items-center justify-center"
-              whileHover={{ scale: 1.03, rotate: -1 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.2 }}
-            >
+            <div className="h-10 flex items-center justify-center">
               <span
                 className="text-3xl text-gray-900 leading-none"
                 style={{
@@ -36,7 +31,7 @@ export default function Header() {
               >
                 M<span className="text-teal-600">Y</span>RVA
               </span>
-            </motion.div>
+            </div>
           </a>
         </div>
 

@@ -120,7 +120,6 @@ export default function HowItWorks() {
                   whileInView={{ opacity: 1, x: 0, rotate: 2 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: 0.2, ease: easeOutQuint }}
-                  whileHover={{ rotate: 0, scale: 1.02 }}
                 >
                   <div className="absolute -top-4 -right-4 w-12 h-12 bg-red-100 rounded-full flex items-center justify-center shadow-lg border-2 border-white z-20 transform rotate-12">
                     <span className="text-xl" style={{ fontFamily: '"Permanent Marker"' }}>📍</span>
@@ -172,7 +171,6 @@ export default function HowItWorks() {
                   whileInView={{ opacity: 1, x: 0, rotate: -2 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.8, delay: 0.2, ease: easeOutQuint }}
-                  whileHover={{ rotate: 0, scale: 1.02 }}
                 >
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-2">
@@ -299,53 +297,55 @@ export default function HowItWorks() {
               </div>
 
               <div className="w-full lg:w-1/2 order-1 lg:order-2 flex justify-center lg:justify-start">
-                <motion.div 
-                  className="relative w-72 md:w-80 bg-white rounded-3xl shadow-[0_25px_50px_-12px_rgba(16,185,129,0.25)] border-2 border-emerald-100 p-6 transform rotate-3"
-                  initial={{ opacity: 0, x: 40, y: 20 }}
-                  whileInView={{ opacity: 1, x: 0, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: 0.2, ease: easeOutQuint }}
-                  whileHover={{ rotate: 0, scale: 1.02, y: -5 }}
-                >
-                  {/* Confetti / Success Background */}
-                  <div className="absolute -top-10 -right-10 w-24 h-24 bg-emerald-400 rounded-full blur-[40px] opacity-40" />
+                  <motion.div 
+                    className="relative w-72 md:w-80 bg-white rounded-2xl shadow-xl border border-gray-200 p-5 overflow-hidden"
+                    initial={{ opacity: 0, x: 40, y: 20 }}
+                    whileInView={{ opacity: 1, x: 0, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: 0.2, ease: easeOutQuint }}
+                  >
+                    {/* Status bar indicator */}
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                      <span className="text-xs font-medium text-emerald-600">Settled</span>
+                      <span className="text-xs text-gray-400 ml-auto">2 min ago</span>
+                    </div>
 
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center flex-shrink-0">
-                      <motion.svg 
-                        className="w-8 h-8 text-emerald-600" 
-                        fill="none" 
-                        viewBox="0 0 24 24" 
-                        stroke="currentColor"
-                        initial={{ pathLength: 0 }}
-                        whileInView={{ pathLength: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: 0.6 }}
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                      </motion.svg>
+                    <div className="flex items-start gap-3 mb-4">
+                      <div className="w-10 h-10 bg-emerald-50 rounded-full flex items-center justify-center">
+                        <svg className="w-5 h-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                        </svg>
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-semibold text-gray-900">Payout Initiated</p>
+                        <p className="text-xs text-gray-500">UPI • gaurav@okicici</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm font-bold text-emerald-600 uppercase tracking-wider mb-0.5">Payment Sent</p>
-                      <p className="text-xs text-gray-500">Just now via UPI</p>
-                    </div>
-                  </div>
 
-                  <div className="bg-gray-50 rounded-2xl p-4 mb-4 border border-gray-100">
-                    <p className="text-sm text-gray-500 mb-1">Trigger Event</p>
-                    <p className="text-gray-900 font-bold">Severe Waterlogging</p>
-                  </div>
+                    <div className="bg-gray-50 rounded-xl p-3 mb-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs text-gray-500 uppercase tracking-wide">Trigger</span>
+                        <span className="text-xs px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full font-medium">Weather Alert</span>
+                      </div>
+                      <p className="text-gray-800 font-semibold">Heavy Rainfall &gt; 30mm/hr</p>
+                      <p className="text-xs text-gray-400 mt-1">Bengaluru • Mar 20, 10:42 AM</p>
+                    </div>
 
-                  <div className="flex items-end justify-between">
-                    <div>
-                      <p className="text-sm text-gray-500 mb-1">Amount</p>
-                      <p className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">₹450</p>
+                    <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                      <div>
+                        <p className="text-xs text-gray-400 mb-0.5">Amount Received</p>
+                        <p className="text-2xl font-bold text-gray-900">₹450</p>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <svg className="w-4 h-4 text-emerald-500" fill="currentColor" viewBox="0 0 24 24">
+                          <circle cx="12" cy="12" r="10" fill="currentColor" fillOpacity="0.2"/>
+                          <path d="M8 12l2.5 2.5L16 9" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <span className="text-xs text-emerald-600 font-medium">Credited</span>
+                      </div>
                     </div>
-                    <div className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center">
-                      <span className="text-xl">💸</span>
-                    </div>
-                  </div>
-                </motion.div>
+                  </motion.div>
               </div>
             </div>
 
