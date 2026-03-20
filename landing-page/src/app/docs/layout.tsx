@@ -9,13 +9,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <DocsLayout
         tree={source.pageTree}
         nav={{ title: "Myrva Docs", url: "/docs" }}
-        links={[
-          {
-            type: "main",
-            text: "Landing Page",
-            url: "/",
-          },
-        ]}
+        links={[]}
       >
         {children}
       </DocsLayout>
