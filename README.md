@@ -392,11 +392,11 @@ The Development Plan is Linked to [Development Plan](./TODO.md)
 
 ## Team & Contributors
 
-Built with purpose and late nights by the Myrva team for **Guidewire DEVTrails 2026**.
+Protecting every mile, every hour, and every gig. Designed by Myrva for **Guidewire DEVTrails 2026**.
 
 | | | | | |
 |:---:|:---:|:---:|:---:|:---:|
-| [![Karthick J S](https://avatars.githubusercontent.com/Karthick-1905?v=4&s=120)](https://github.com/Karthick-1905) | [![Yeshwanth S](https://avatars.githubusercontent.com/yesh-045?v=4&s=120)](https://github.com/yesh-045) | [![Surya Narayanaa N T](https://avatars.githubusercontent.com/SuryaNarayanaa?v=4&s=120)](https://github.com/SuryaNarayanaa) | [![Dhaaru Abhimanyu S](https://avatars.githubusercontent.com/Dhaarun-Abhimanyu?v=4&s=120)](https://github.com/Dhaarun-Abhimanyu) | [![Surya Prakash B](https://avatars.githubusercontent.com/Surya0265?v=4&s=120)](https://github.com/Surya0265) |
+| [![Karthick J S](https://avatars.githubusercontent.com/Karthick-1905?v=4&s=120)](https://github.com/Karthick-1905) | [![Yeshwanth S](https://avatars.githubusercontent.com/yesh-045?v=4&s=120)](https://github.com/yesh-045) | [![Surya Narayanaa N T](https://avatars.githubusercontent.com/SuryaNarayanaa?v=4&s=120)](https://github.com/SuryaNarayanaa) | [![Dhaarun Abhimanyu S](https://avatars.githubusercontent.com/Dhaarun-Abhimanyu?v=4&s=120)](https://github.com/Dhaarun-Abhimanyu) | [![Surya Prakash B](https://avatars.githubusercontent.com/Surya0265?v=4&s=120)](https://github.com/Surya0265) |
 | [Karthick J S](https://github.com/Karthick-1905) | [Yeshwanth S](https://github.com/yesh-045) | [Surya Narayanaa N T](https://github.com/SuryaNarayanaa) | [Dhaaru Abhimanyu S](https://github.com/Dhaarun-Abhimanyu) | [Surya Prakash B](https://github.com/Surya0265) |
 
 ---
