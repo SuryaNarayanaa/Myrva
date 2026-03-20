@@ -17,6 +17,7 @@ Myrva is a parametric insurance platform built for platform-based gig workers (S
 - [Data Architecture](#data-architecture)
 - [Development Plan](#development-plan)
 - [Tech Stack](#tech-stack)
+- [Team & Contributors](#team--contributors)
 
 ---
 
@@ -386,5 +387,16 @@ The Development Plan is Linked to [Development Plan](./TODO.md)
 | Redis (Feature Store) | Real-time ML feature serving - risk scores, earnings data, weather features, location signals |
  
 - Chose React Native to enable real-time, location-aware interactions (GPS, notifications) and provide a more reliable, performant experience for workers compared to a web app.
+
+---
+
+## Team & Contributors
+
+Built with purpose and late nights by the Myrva team for **Guidewire DEVTrails 2026**.
+
+| | | | | |
+|:---:|:---:|:---:|:---:|:---:|
+| [![Karthick J S](https://avatars.githubusercontent.com/Karthick-1905?v=4&s=120)](https://github.com/Karthick-1905) | [![Yeshwanth S](https://avatars.githubusercontent.com/yesh-045?v=4&s=120)](https://github.com/yesh-045) | [![Surya Narayanaa N T](https://avatars.githubusercontent.com/SuryaNarayanaa?v=4&s=120)](https://github.com/SuryaNarayanaa) | [![Dhaaru Abhimanyu S](https://avatars.githubusercontent.com/Dhaarun-Abhimanyu?v=4&s=120)](https://github.com/Dhaarun-Abhimanyu) | [![Surya Prakash B](https://avatars.githubusercontent.com/Surya0265?v=4&s=120)](https://github.com/Surya0265) |
+| [Karthick J S](https://github.com/Karthick-1905) | [Yeshwanth S](https://github.com/yesh-045) | [Surya Narayanaa N T](https://github.com/SuryaNarayanaa) | [Dhaaru Abhimanyu S](https://github.com/Dhaarun-Abhimanyu) | [Surya Prakash B](https://github.com/Surya0265) |
 
 ---
