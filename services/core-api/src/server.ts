@@ -1,10 +1,16 @@
 import app from './app'
-import {PORT} from './config/env'
+import { PORT } from './config/env'
 
-app.listen(PORT, (err) => {
-    if (err) {
-        console.error("Error starting the server: ", err)
-        process.exit(1)
-    }
+const server = app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`)
 })
+
+const shutdown = (signal: NodeJS.Signals) => {
+    console.log(`Received ${signal}. Shutting down gracefully...`)
+    server.close(() => {
+        process.exit(0)
+    })
+}
+
+process.on('SIGINT', () => shutdown('SIGINT'))
+process.on('SIGTERM', () => shutdown('SIGTERM'))
