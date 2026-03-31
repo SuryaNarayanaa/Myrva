@@ -26,7 +26,7 @@ export function generateSalt() {
 }
 
 export const generateToken = (payload: object) => {
-    return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRY });
+    return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRY as any });
 };
 
 export const verifyToken = (token: string) => {

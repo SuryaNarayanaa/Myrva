@@ -22,4 +22,16 @@ class NotFoundError extends Error {
     }
 }
 
-export {BadRequestError, NotFoundError}
+class ResourceConflict extends Error {
+    statusCode: number
+    data: null
+    success: boolean
+    constructor(message: string = "Conflicted Resource") {
+        super(message)
+        this.statusCode = 409
+        this.data = null
+        this.success = false
+    }
+}
+
+export {BadRequestError, NotFoundError, ResourceConflict}

@@ -6,10 +6,12 @@ import { workerOtps } from "../db/schemas/otp.schema";
 import { sendOtpEmail } from "../utils/email";
 import { generateToken } from "../utils/auth.utils";
 import { createInsertSchema } from "drizzle-zod";
+import { asyncHandler } from "../utils";
+import { ResourceConflict } from "../errors";
 
 const registerSchema = createInsertSchema(workers);
 
-export const register = async (req: Request, res: Response) => {
+export const register = asyncHandler("Register User" , async(req: Request, res: Response) => {
     const validationResult = registerSchema.safeParse(req.body);
     if (!validationResult.success) {
         return res.status(400).json({ errors: validationResult.error.flatten() });
@@ -22,13 +24,13 @@ export const register = async (req: Request, res: Response) => {
     });
 
     if (existingWorker) {
-        return res.status(409).json({ message: "Worker with this email already exists" });
+        throw new ResourceConflict("Worker with this email already exists")
     }
 
     const newWorker = await db.insert(workers).values(validationResult.data).returning();
 
-    res.status(201).json(newWorker[0]);
-};
+    return res.status(201).json(newWorker[0]);
+});
 
 export const login = async (req: Request, res: Response) => {
     const { email } = req.body;
@@ -62,10 +64,10 @@ export const login = async (req: Request, res: Response) => {
 
     try {
         await sendOtpEmail(worker.email, otp);
-        res.status(200).json({ message: "OTP sent to your email" });
+        return res.status(200).json({ message: "OTP sent to your email" });
     } catch (error) {
         console.error("Error sending email:", error);
-        res.status(500).json({ message: "Failed to send OTP email" });
+        return res.status(500).json({ message: "Failed to send OTP email" });
     }
 };
 
@@ -100,5 +102,5 @@ export const verifyOtp = async (req: Request, res: Response) => {
 
     const token = generateToken({ id: worker.id });
 
-    res.status(200).json({ token });
+    return res.status(200).json({ token });
 };
