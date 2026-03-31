@@ -1,4 +1,4 @@
-# External Platform Routes - Swiggy & Zomato Integration
+# External Platform Routes - Swiggy Integration
 **Last Updated:** March 31, 2026  
 **Project:** Myrva - AI-Powered Parametric Income Insurance for Gig Workers
 
@@ -6,16 +6,15 @@
 
 ## Table of Contents
 1. [Overview](#overview)
-2. [Swiggy Routes](#swiggy-routes)
-3. [Zomato Routes](#zomato-routes)
-4. [Data Format Standards](#data-format-standards)
-5. [Security & Authentication](#security--authentication)
+2. [Route Categories](#route-categories)
+3. [Data Format Standards](#data-format-standards)
+4. [Security & Authentication](#security--authentication)
 
 ---
 
 ## Overview
 
-Myrva requires integration with Swiggy and Zomato to fetch real-time and historical data about worker performance, earnings, and activity. This data is critical for:
+Myrva requires integration with Swiggy to fetch real-time and historical data about worker performance, earnings, and activity. This data is critical for:
 
 - **Premium Calculation** - Computing weekly premiums using worker's expected earnings (`E_w`)
 - **Risk Assessment** - Understanding disruption patterns and worker availability
@@ -25,20 +24,22 @@ Myrva requires integration with Swiggy and Zomato to fetch real-time and histori
 
 ### Data Flow
 ```
-Swiggy/Zomato APIs → Core API (data ingestion layer) → Database → 
+Swiggy API → Core API (data ingestion layer) → Database → 
 Risk Assessment Pipeline & Premium Calculation Engine
 ```
 
 ---
 
-## SWIGGY ROUTES
+## Route Categories
 
-### Category 1: Worker Onboarding & Verification
+**Swiggy** exposes 12 routes across 6 categories:
 
-#### 1.1 Verify Worker Identity on Platform
+### Category 1: Worker Verification & Identity (3 Routes)
+
+#### 1.1 Verify Worker Account
 **Route:** `GET /api/v3/workers/{worker_id}/verify`  
-**Purpose:** Validate that a worker exists on Swiggy's platform and retrieve official profile data  
-**Authentication:** Bearer Token (OAuth2 or API Key)  
+**Purpose:** Validate that a worker exists on Swiggy and retrieve official profile data  
+**Authentication:** Bearer Token (OAuth2)  
 
 **Request:**
 ```json
@@ -69,17 +70,10 @@ Risk Assessment Pipeline & Premium Calculation Engine
 
 ---
 
-#### 1.2 Get Worker Account Status
+#### 1.2 Get Account Status
 **Route:** `GET /api/v3/workers/{worker_id}/account-status`  
-**Purpose:** Real-time worker account status to prevent claims from inactive/suspended workers  
+**Purpose:** Real-time account status to prevent claims from inactive/suspended workers  
 **Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "worker_id": "uuid"
-}
-```
 
 **Response:**
 ```json
@@ -96,17 +90,10 @@ Risk Assessment Pipeline & Premium Calculation Engine
 
 ---
 
-#### 1.3 Check Document Expiry
+#### 1.3 Check Document Validity
 **Route:** `GET /api/v3/workers/{worker_id}/documents-expiry`  
-**Purpose:** Verify that worker's verification documents (DL, Aadhar) are still valid  
+**Purpose:** Verify worker's verification documents (DL, Aadhar, PAN) are still valid  
 **Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "worker_id": "uuid"
-}
-```
 
 **Response:**
 ```json
@@ -128,22 +115,12 @@ Risk Assessment Pipeline & Premium Calculation Engine
 
 ---
 
-### Category 2: Earnings & Income Data
+### Category 2: Earnings & Income Data (3 Routes)
 
-#### 2.1 Get Worker Weekly Earnings
+#### 2.1 Get Weekly Earnings
 **Route:** `GET /api/v3/workers/{worker_id}/earnings/weekly`  
 **Purpose:** Fetch worker's weekly earnings baseline (crucial for `E_w` variable in premium formula)  
 **Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "worker_id": "uuid",
-  "week_start_date": "YYYY-MM-DD",
-  "week_end_date": "YYYY-MM-DD",
-  "include_breakdown": "boolean (optional, default: true)"
-}
-```
 
 **Response:**
 ```json
@@ -161,7 +138,7 @@ Risk Assessment Pipeline & Premium Calculation Engine
   },
   "working_days": "integer",
   "average_daily_earnings": "number",
-  "peak_hours_earnings": "number (12 PM - 3 PM earnings)",
+  "peak_hours_earnings": "number (12 PM - 3 PM)",
   "off_peak_hours_earnings": "number"
 }
 ```
@@ -174,15 +151,6 @@ Risk Assessment Pipeline & Premium Calculation Engine
 **Route:** `GET /api/v3/workers/{worker_id}/earnings/history`  
 **Purpose:** Calculate 12-week rolling average for baseline `E_w` and detect earning trends  
 **Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "worker_id": "uuid",
-  "weeks": "integer (default: 12)",
-  "include_daily_breakdown": "boolean (optional)"
-}
-```
 
 **Response:**
 ```json
@@ -209,19 +177,10 @@ Risk Assessment Pipeline & Premium Calculation Engine
 
 ---
 
-#### 2.3 Get Daily Earnings & Time Breakdown
+#### 2.3 Get Hourly Earnings Breakdown
 **Route:** `GET /api/v3/workers/{worker_id}/earnings/daily`  
 **Purpose:** Hourly earnings breakdown to understand peak vs off-peak patterns (for severity calculation `S_i`)  
 **Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "worker_id": "uuid",
-  "date": "YYYY-MM-DD",
-  "include_hourly_breakdown": "boolean (optional, default: true)"
-}
-```
 
 **Response:**
 ```json
@@ -248,22 +207,12 @@ Risk Assessment Pipeline & Premium Calculation Engine
 
 ---
 
-### Category 3: Order & Delivery Data
+### Category 3: Order & Delivery Data (3 Routes)
 
-#### 3.1 Get Worker Orders (Last 100)
+#### 3.1 Get Order History (Last 100)
 **Route:** `GET /api/v3/workers/{worker_id}/orders`  
 **Purpose:** Retrieve recent order history for fraud detection and earning correlation  
 **Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "worker_id": "uuid",
-  "limit": "integer (default: 100, max: 500)",
-  "days_back": "integer (default: 30)",
-  "include_details": "boolean (optional)"
-}
-```
 
 **Response:**
 ```json
@@ -296,17 +245,10 @@ Risk Assessment Pipeline & Premium Calculation Engine
 
 ---
 
-#### 3.2 Get Real-time Order Activity
+#### 3.2 Get Real-time Active Orders
 **Route:** `GET /api/v3/workers/{worker_id}/active-orders`  
 **Purpose:** Get real-time active orders to verify worker is actually online during disruption claims  
 **Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "worker_id": "uuid"
-}
-```
 
 **Response:**
 ```json
@@ -333,19 +275,10 @@ Risk Assessment Pipeline & Premium Calculation Engine
 
 ---
 
-#### 3.3 Get Order Acceptance & Rejection Rates
+#### 3.3 Get Performance Metrics
 **Route:** `GET /api/v3/workers/{worker_id}/order-metrics`  
-**Purpose:** Calculate acceptance/rejection rates for fraud detection (sudden drop indicates spoofing)  
+**Purpose:** Calculate acceptance/rejection/on-time rates for fraud detection  
 **Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "worker_id": "uuid",
-  "period": "daily|weekly|monthly",
-  "days": "integer (default: 30)"
-}
-```
 
 **Response:**
 ```json
@@ -367,21 +300,12 @@ Risk Assessment Pipeline & Premium Calculation Engine
 
 ---
 
-### Category 4: Online Status & Activity
+### Category 4: Online Status & Availability (2 Routes)
 
-#### 4.1 Get Worker Online Status Timeline
+#### 4.1 Get Online Status Timeline
 **Route:** `GET /api/v3/workers/{worker_id}/online-status-timeline`  
 **Purpose:** Get daily online/offline status to correlate with disruption windows  
 **Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "worker_id": "uuid",
-  "date": "YYYY-MM-DD",
-  "include_raw_events": "boolean (optional)"
-}
-```
 
 **Response:**
 ```json
@@ -410,16 +334,8 @@ Risk Assessment Pipeline & Premium Calculation Engine
 
 #### 4.2 Get Weekly Activity Summary
 **Route:** `GET /api/v3/workers/{worker_id}/activity-summary`  
-**Purpose:** Weekly overview of work hours, availability for risk assessment  
+**Purpose:** Weekly overview of work hours and availability for risk assessment  
 **Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "worker_id": "uuid",
-  "week_start_date": "YYYY-MM-DD"
-}
-```
 
 **Response:**
 ```json
@@ -441,19 +357,12 @@ Risk Assessment Pipeline & Premium Calculation Engine
 
 ---
 
-### Category 5: Zone & Location Data
+### Category 5: Zone & Location Data (2 Routes)
 
 #### 5.1 Get Worker Zone Information
 **Route:** `GET /api/v3/workers/{worker_id}/zone`  
 **Purpose:** Get assigned zone for weather and disruption data correlation  
 **Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "worker_id": "uuid"
-}
-```
 
 **Response:**
 ```json
@@ -476,9 +385,9 @@ Risk Assessment Pipeline & Premium Calculation Engine
 
 ---
 
-#### 5.2 Get Zone Peak Hours
+#### 5.2 Get Zone Peak Hours & Demand
 **Route:** `GET /api/v3/zones/{zone_code}/peak-hours`  
-**Purpose:** Understand peak demand hours in zone for severity calculation  
+**Purpose:** Understand peak demand hours for severity calculation  
 **Authentication:** Bearer Token  
 
 **Request:**
@@ -507,11 +416,11 @@ Risk Assessment Pipeline & Premium Calculation Engine
 
 ---
 
-### Category 6: Fraud Detection Signals
+### Category 6: Fraud Detection Signals (2 Routes)
 
-#### 6.1 Get Worker GPS/Location Data
+#### 6.1 Get Location Tracking Data
 **Route:** `GET /api/v3/workers/{worker_id}/location-history`  
-**Purpose:** Verify worker was actually in zone during claim (GPS spoofing detection)  
+**Purpose:** GPS coordinates to verify worker was in zone during claim (spoofing detection)  
 **Authentication:** Bearer Token  
 
 **Request:**
@@ -546,18 +455,10 @@ Risk Assessment Pipeline & Premium Calculation Engine
 
 ---
 
-#### 6.2 Get Device & Behavior Metrics
+#### 6.2 Get Device & Behavior Anomalies
 **Route:** `GET /api/v3/workers/{worker_id}/device-behavior`  
-**Purpose:** Detect spoofing via device rotation, acceleration anomalies  
+**Purpose:** Detect spoofing via device rotation, acceleration anomalies, impossible speeds  
 **Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "worker_id": "uuid",
-  "date": "YYYY-MM-DD"
-}
-```
 
 **Response:**
 ```json
@@ -578,541 +479,6 @@ Risk Assessment Pipeline & Premium Calculation Engine
 ```
 
 **Status Codes:** 200, 404
-
----
-
----
-
-## ZOMATO ROUTES
-
-### Category 1: Worker Verification & Identity
-
-#### 1.1 Verify Rider Account
-**Route:** `GET /api/v2/riders/{rider_id}/verify`  
-**Purpose:** Validate rider exists on Zomato and retrieve verified profile  
-**Authentication:** Bearer Token (OAuth2)  
-
-**Request:**
-```json
-{
-  "rider_id": "uuid",
-  "phone_no": "string"
-}
-```
-
-**Response:**
-```json
-{
-  "rider_id": "string",
-  "name": "string",
-  "phone_no": "string",
-  "email": "string",
-  "is_verified": "boolean",
-  "verification_date": "ISO8601",
-  "account_status": "active|inactive|suspended",
-  "city_code": "string",
-  "vehicle_type": "bike|scooter|cycle",
-  "onboarding_date": "ISO8601",
-  "rating": "number (1-5)"
-}
-```
-
-**Status Codes:** 200, 400, 401, 404
-
----
-
-#### 1.2 Get Rider Account Health
-**Route:** `GET /api/v2/riders/{rider_id}/account-health`  
-**Purpose:** Real-time account status and warnings (suspensions, violations)  
-**Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "rider_id": "uuid"
-}
-```
-
-**Response:**
-```json
-{
-  "rider_id": "string",
-  "health_score": "number (0-100)",
-  "account_status": "active|inactive|suspended|banned",
-  "active_warnings": "integer",
-  "last_violation_date": "ISO8601|null",
-  "suspension_active": "boolean",
-  "suspension_end_date": "ISO8601|null"
-}
-```
-
-**Status Codes:** 200, 404
-
----
-
-#### 1.3 Check Document Validity
-**Route:** `GET /api/v2/riders/{rider_id}/documentation`  
-**Purpose:** Verify current documents (DL, RC) haven't expired  
-**Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "rider_id": "uuid"
-}
-```
-
-**Response:**
-```json
-{
-  "rider_id": "string",
-  "documents": [
-    {
-      "doc_type": "driving_license|registration_certificate|insurance",
-      "issue_date": "ISO8601",
-      "expiry_date": "ISO8601",
-      "is_valid": "boolean",
-      "days_until_expiry": "integer"
-    }
-  ]
-}
-```
-
-**Status Codes:** 200, 404
-
----
-
-### Category 2: Earnings & Revenue Data
-
-#### 2.1 Get Rider Weekly Earnings
-**Route:** `GET /api/v2/riders/{rider_id}/earnings/weekly`  
-**Purpose:** Weekly income for premium calculation (essential for `E_w` variable)  
-**Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "rider_id": "uuid",
-  "week_start_date": "YYYY-MM-DD",
-  "include_commission_breakdown": "boolean (optional)"
-}
-```
-
-**Response:**
-```json
-{
-  "rider_id": "string",
-  "week_start_date": "ISO8601",
-  "week_end_date": "ISO8601",
-  "gross_earnings": "number",
-  "commissions_paid": "number",
-  "bonuses_earned": "number",
-  "incentives": "number",
-  "net_earnings": "number",
-  "active_days": "integer",
-  "orders_completed": "integer",
-  "peak_hours_earning": "number (12 PM - 3 PM)",
-  "off_peak_earning": "number"
-}
-```
-
-**Status Codes:** 200, 404
-
----
-
-#### 2.2 Get Earnings History (Last 12 Weeks)
-**Route:** `GET /api/v2/riders/{rider_id}/earnings/history`  
-**Purpose:** Historical earnings trend for baseline calculation and risk assessment  
-**Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "rider_id": "uuid",
-  "weeks": "integer (default: 12)"
-}
-```
-
-**Response:**
-```json
-{
-  "rider_id": "string",
-  "weeks_data": [
-    {
-      "week_start": "ISO8601",
-      "week_end": "ISO8601",
-      "net_earnings": "number",
-      "active_days": "integer",
-      "average_daily_earning": "number",
-      "orders_completed": "integer"
-    }
-  ],
-  "average_weekly_earning_12w": "number",
-  "earning_volatility": "number (standard deviation)",
-  "trend": "increasing|stable|decreasing"
-}
-```
-
-**Status Codes:** 200, 404
-
----
-
-#### 2.3 Get Hourly Earnings Breakdown
-**Route:** `GET /api/v2/riders/{rider_id}/earnings/hourly`  
-**Purpose:** Hourly breakdown for peak vs off-peak patterns (severity calculation)  
-**Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "rider_id": "uuid",
-  "date": "YYYY-MM-DD"
-}
-```
-
-**Response:**
-```json
-{
-  "rider_id": "string",
-  "date": "ISO8601",
-  "daily_total": "number",
-  "hourly_data": [
-    {
-      "hour": "string (12 PM - 1 PM)",
-      "earnings": "number",
-      "orders": "integer",
-      "online_minutes": "integer",
-      "cancellations": "integer"
-    }
-  ]
-}
-```
-
-**Status Codes:** 200, 404
-
----
-
-### Category 3: Deliveries & Orders
-
-#### 3.1 Get Rider Order History
-**Route:** `GET /api/v2/riders/{rider_id}/orders`  
-**Purpose:** Recent order history for fraud verification and activity correlation  
-**Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "rider_id": "uuid",
-  "limit": "integer (default: 100, max: 500)",
-  "days": "integer (default: 30)"
-}
-```
-
-**Response:**
-```json
-{
-  "rider_id": "string",
-  "total_orders": "integer",
-  "orders": [
-    {
-      "order_id": "string",
-      "order_datetime": "ISO8601",
-      "restaurant_name": "string",
-      "pickup_location": "string (lat,long)",
-      "delivery_location": "string (lat,long)",
-      "order_value": "number",
-      "delivery_fee": "number",
-      "distance_km": "number",
-      "pickup_time": "ISO8601",
-      "delivery_time": "ISO8601",
-      "delivery_duration_minutes": "integer",
-      "status": "completed|cancelled|rejected",
-      "cancellation_reason": "string|null",
-      "customer_rating": "number (1-5)|null"
-    }
-  ]
-}
-```
-
-**Status Codes:** 200, 404
-
----
-
-#### 3.2 Get Active Orders in Real-time
-**Route:** `GET /api/v2/riders/{rider_id}/active-deliveries`  
-**Purpose:** Currently active orders to verify online status during disruptions  
-**Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "rider_id": "uuid"
-}
-```
-
-**Response:**
-```json
-{
-  "rider_id": "string",
-  "is_online": "boolean",
-  "last_activity_time": "ISO8601",
-  "active_deliveries": "integer",
-  "current_orders": [
-    {
-      "order_id": "string",
-      "order_assigned_time": "ISO8601",
-      "pickup_location": "string (lat,long)",
-      "delivery_location": "string (lat,long)",
-      "time_elapsed_minutes": "integer"
-    }
-  ]
-}
-```
-
-**Status Codes:** 200, 404
-
----
-
-#### 3.3 Get Completion & Cancellation Metrics
-**Route:** `GET /api/v2/riders/{rider_id}/performance-metrics`  
-**Purpose:** Calculate reliability scores for fraud detection  
-**Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "rider_id": "uuid",
-  "days": "integer (default: 30)"
-}
-```
-
-**Response:**
-```json
-{
-  "rider_id": "string",
-  "period_start": "ISO8601",
-  "period_end": "ISO8601",
-  "completion_rate_percent": "number",
-  "cancellation_rate_percent": "number",
-  "on_time_delivery_percent": "number",
-  "average_delivery_time_minutes": "number",
-  "average_rating": "number (1-5)",
-  "total_orders": "integer",
-  "rejected_orders": "integer"
-}
-```
-
-**Status Codes:** 200, 404
-
----
-
-### Category 4: Online Availability
-
-#### 4.1 Get Rider Online Status Log
-**Route:** `GET /api/v2/riders/{rider_id}/availability`  
-**Purpose:** Daily online/offline timeline to match with disruption windows  
-**Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "rider_id": "uuid",
-  "date": "YYYY-MM-DD",
-  "include_sessions": "boolean (optional)"
-}
-```
-
-**Response:**
-```json
-{
-  "rider_id": "string",
-  "date": "ISO8601",
-  "total_online_minutes": "integer",
-  "online_sessions": [
-    {
-      "session_start": "ISO8601",
-      "session_end": "ISO8601",
-      "duration_minutes": "integer",
-      "orders_in_session": "integer",
-      "earnings_in_session": "number"
-    }
-  ],
-  "is_currently_online": "boolean"
-}
-```
-
-**Status Codes:** 200, 404
-
----
-
-#### 4.2 Get Weekly Availability Summary
-**Route:** `GET /api/v2/riders/{rider_id}/weekly-availability`  
-**Purpose:** Weekly work pattern for risk assessment  
-**Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "rider_id": "uuid",
-  "week_start_date": "YYYY-MM-DD"
-}
-```
-
-**Response:**
-```json
-{
-  "rider_id": "string",
-  "week_start_date": "ISO8601",
-  "week_end_date": "ISO8601",
-  "total_hours_online": "number",
-  "active_days": "integer",
-  "average_daily_hours": "number",
-  "most_active_hours": "array of hours",
-  "orders_weekly": "integer",
-  "revenue_weekly": "number"
-}
-```
-
-**Status Codes:** 200, 404
-
----
-
-### Category 5: Zone & City Data
-
-#### 5.1 Get Rider Assigned City/Zone
-**Route:** `GET /api/v2/riders/{rider_id}/service-area`  
-**Purpose:** Zone assignment for weather and disruption data matching  
-**Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "rider_id": "uuid"
-}
-```
-
-**Response:**
-```json
-{
-  "rider_id": "string",
-  "city_code": "string",
-  "city_name": "string",
-  "state": "string",
-  "assigned_zones": [
-    {
-      "zone_id": "string",
-      "zone_name": "string",
-      "polygon_coordinates": "array"
-    }
-  ]
-}
-```
-
-**Status Codes:** 200, 404
-
----
-
-#### 5.2 Get City Peak Hours & Demand
-**Route:** `GET /api/v2/cities/{city_code}/peak-demand`  
-**Purpose:** Peak hours in city for severity calculation  
-**Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "city_code": "string"
-}
-```
-
-**Response:**
-```json
-{
-  "city_code": "string",
-  "city_name": "string",
-  "peak_hours": [
-    {
-      "hour": "string (12 PM - 1 PM)",
-      "average_orders_available": "integer",
-      "average_earning_potential": "number"
-    }
-  ]
-}
-```
-
-**Status Codes:** 200, 404
-
----
-
-### Category 6: Anti-Fraud Mechanisms
-
-#### 6.1 Get Rider Location Tracking Data
-**Route:** `GET /api/v2/riders/{rider_id}/location-data`  
-**Purpose:** GPS coordinates to verify rider was in zone during claim (spoofing detection)  
-**Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "rider_id": "uuid",
-  "date": "YYYY-MM-DD",
-  "interval": "5min|30min|hourly"
-}
-```
-
-**Response:**
-```json
-{
-  "rider_id": "string",
-  "date": "ISO8601",
-  "location_points": [
-    {
-      "timestamp": "ISO8601",
-      "latitude": "number",
-      "longitude": "number",
-      "accuracy_meters": "number"
-    }
-  ],
-  "stayed_in_zone": "boolean",
-  "zone_presence_percent": "number"
-}
-```
-
-**Status Codes:** 200, 404
-
----
-
-#### 6.2 Get Rider Behavior Anomalies
-**Route:** `GET /api/v2/riders/{rider_id}/anomalies`  
-**Purpose:** Detect spoofing via impossible speeds, device changes, pattern breaks  
-**Authentication:** Bearer Token  
-
-**Request:**
-```json
-{
-  "rider_id": "uuid",
-  "date": "YYYY-MM-DD"
-}
-```
-
-**Response:**
-```json
-{
-  "rider_id": "string",
-  "date": "ISO8601",
-  "anomalies_detected": [
-    {
-      "anomaly_type": "impossible_speed|location_jump|device_change|pattern_break",
-      "timestamp": "ISO8601",
-      "severity": "low|medium|high",
-      "description": "string"
-    }
-  ]
-}
-```
-
-**Status Codes:** 200, 404
-
----
 
 ---
 
@@ -1231,27 +597,27 @@ Header: X-API-Secret: {api_secret}
 
 ## Integration Points in Myrva System
 
-| Myrva Component | Swiggy Routes | Zomato Routes | Purpose |
-|---|---|---|---|
-| **Premium Calculator** | 2.1, 2.2 | 2.1, 2.2 | Get `E_w` (expected weekly earnings) |
-| **Risk Assessment** | 2.2, 4.1, 4.2 | 2.2, 4.1, 4.2 | Predict disruption impact, earnings baseline |
-| **Fraud Detection** | 3.1, 4.1, 6.1, 6.2 | 3.1, 4.1, 6.1, 6.2 | Verify claim legitimacy, detect spoofing |
-| **Claim Eligibility** | 4.1, 4.2, 3.2 | 4.1, 4.2, 3.2 | Verify worker online/active during event |
-| **Trigger Validation** | 5.1, 5.2 | 5.1, 5.2 | Match zone to weather/disruption data |
-| **Worker Onboarding** | 1.1, 1.2, 1.3 | 1.1, 1.2, 1.3 | Verify identity, account validity |
+| Myrva Component | Routes | Purpose |
+|---|---|---|
+| **Premium Calculator** | 2.1, 2.2 | Get `E_w` (expected weekly earnings) |
+| **Risk Assessment** | 2.2, 4.1, 4.2 | Predict disruption impact, earnings baseline |
+| **Fraud Detection** | 3.1, 4.1, 6.1, 6.2 | Verify claim legitimacy, detect spoofing |
+| **Claim Eligibility** | 4.1, 4.2, 3.2 | Verify worker online/active during event |
+| **Trigger Validation** | 5.1, 5.2 | Match zone to weather/disruption data |
+| **Worker Onboarding** | 1.1, 1.2, 1.3 | Verify identity, account validity |
 
 ---
 
 ## Summary Statistics
 
-| Metric | Count |
+| Metric | Value |
 |---|---|
-| **Swiggy Routes** | 12 |
-| **Zomato Routes** | 12 |
-| **Total Routes** | 24 |
-| **Categories** | 6 (5 common + analytics per platform) |
+| **Total Routes** | 12 |
+| **Route Categories** | 6 |
+| **Routes per Category** | 2 |
 | **Authentication Methods** | 2 (OAuth2, API Key) |
 | **Data Points Collected** | 150+ |
+| **Myrva Components Supported** | 6 |
 
 ---
 
