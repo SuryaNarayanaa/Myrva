@@ -18,15 +18,21 @@ export const zones = table("zones", {
 
 export const workers = table("workers", {
   id: uuid("id").primaryKey().defaultRandom(),
-  name: t.varchar({length: 255}).notNull(),
-  phoneNo : t.varchar({length: 255}).notNull(),
-  email: t.varchar({length: 255}).notNull().unique(),
-  zoneId: uuid("zone_id").notNull().references(() => zones.id),
-  platform: platformEnum().notNull().default("swiggy"),
-  vehicleType: vehicleType().notNull().default("bike"),
-  status : workerStatus().notNull().default("active"),
+  name: t.varchar("name", { length: 255 }).notNull(),
+  phoneNo: t.varchar("phone_no", { length: 255 }).notNull(),
+  email: t.varchar("email", { length: 255 }).notNull().unique(),
+  zoneId: uuid("zone_id")
+    .notNull()
+    .references(() => zones.id),
+  platform: platformEnum("platform").notNull().default("swiggy"),
+  vehicleType: vehicleType("vehicle_type")
+    .notNull()
+    .default("bike"),
+  status: workerStatus("status")
+    .notNull()
+    .default("active"),
   ...timestamps
-})
+});
 
 export const identityVerifications = table("identity_verifications", {
   id: uuid("id").primaryKey().defaultRandom(),

@@ -1,0 +1,1 @@
+ALTER TABLE "worker_otps" ADD CONSTRAINT "worker_otps_worker_id_unique" UNIQUE("worker_id");

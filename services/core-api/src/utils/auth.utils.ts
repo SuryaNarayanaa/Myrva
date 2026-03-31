@@ -1,4 +1,6 @@
-import crypto from 'crypto'
+import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
+import { JWT_SECRET, JWT_EXPIRY } from '../config/env';
 
 export function hashPassword(password: string, salt: string): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -22,4 +24,16 @@ export async function comparePasswords({password,salt,hashedPassword}:
 export function generateSalt() {
   return crypto.randomBytes(16).toString("hex").normalize()
 }
+
+export const generateToken = (payload: object) => {
+    return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRY });
+};
+
+export const verifyToken = (token: string) => {
+    try {
+        return jwt.verify(token, JWT_SECRET);
+    } catch (error) {
+        return null;
+    }
+};
 

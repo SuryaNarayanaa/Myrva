@@ -5,6 +5,7 @@ export * from './schemas/claims.schema';
 export * from './schemas/trigger.schema';
 export * from './schemas/tier-event-coverage.schema';
 export * from './schemas/risk-scores.schema';
+export * from './schemas/otp.schema';
 
 
 import * as policySchema from './schemas/policy.schema';
@@ -13,6 +14,7 @@ import * as claimsSchema from './schemas/claims.schema';
 import * as triggerSchema from './schemas/trigger.schema';
 import * as tierEventCoverageSchema from './schemas/tier-event-coverage.schema';
 import * as riskScoresSchema from "./schemas/risk-scores.schema"
+import * as otpSchema from './schemas/otp.schema';
 
 
 export const schema = {
@@ -21,7 +23,8 @@ export const schema = {
   ...claimsSchema,
   ...triggerSchema,
   ...tierEventCoverageSchema,
-  ...riskScoresSchema
+  ...riskScoresSchema,
+  ...otpSchema
 };
 
 // TypeScript type inference exports
@@ -74,4 +77,8 @@ export type NewTierEventCoverage = InferInsertModel<typeof tierEventCoverageSche
 // Risk Score Types
 
 export type RiskScores = InferSelectModel<typeof riskScoresSchema.riskScores>
-export type newRiskScores = InferInsertModel<typeof riskScoresSchema.riskScores> 
+export type newRiskScores = InferInsertModel<typeof riskScoresSchema.riskScores>
+
+// OTP Types
+export type WorkerOtp = InferSelectModel<typeof otpSchema.workerOtps>;
+export type NewWorkerOtp = InferInsertModel<typeof otpSchema.workerOtps>;
