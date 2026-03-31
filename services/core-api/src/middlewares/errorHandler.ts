@@ -11,14 +11,14 @@ const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
 
   const contextualError = err as ContextualError
 
-  const context = contextualError.context ?? {
+  const errorContext = contextualError.context ?? {
     controller: 'unknownController',
     method: req.method,
     path: req.originalUrl
   }
 
   // Use The context for log The error for analaysis 
-  // logger.error(`Error: ${err.message} in ${context.controller} in ${context.path} for {context.method} as {err.stack}`)
+  console.error(`Error: ${err.message} in ${errorContext.controller} in ${errorContext.path} for ${errorContext.method} as ${err.stack}`)
   // logger.error({ message: err.message, ....  })
 
   let error = err

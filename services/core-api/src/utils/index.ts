@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction, RequestHandler} from 'express'
 
-type AsyncRequestHandler = (req: Request, res: Response, next: NextFunction) => Promise<void> | void
+type AsyncRequestHandler = (req: Request, res: Response, next: NextFunction) => Promise<any> | any
 
 export type ErrorContext = {
     controller: string
@@ -13,7 +13,7 @@ export type ContextualError = Error & {
 }
 
 export const asyncHandler = (name:string, requestHandler: AsyncRequestHandler): RequestHandler => {
-    return (req: Request, res: Response, next: NextFunction): void => {
+    return (req: Request, res: Response, next: NextFunction)=> {
         Promise.resolve(requestHandler(req, res, next)).catch((err: unknown) => {
             const contextualError: ContextualError = err instanceof Error
                 ? err
